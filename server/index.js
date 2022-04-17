@@ -8,6 +8,8 @@ app.use(cors())
 
 //ROUTES
 
+//registration and login routes
+app.use('/auth', require('./routes/jwtAuth'))
 
 app.listen(5000, () => {
   console.log('app running on port 5000')
