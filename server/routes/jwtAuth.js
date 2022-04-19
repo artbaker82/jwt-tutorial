@@ -2,9 +2,11 @@ const router = require('express').Router()
 const pool = require('../db')
 const bcrypt = require('bcrypt')
 const jwtGenerator = require('../utils/jwtGenerator')
+const validInfo = require('../middleware/validInfo')
+const authorization = require('../middleware/authorization')
 //register new user
 
-router.post('/register', async (req, res) => {
+router.post('/register', validInfo,  async (req, res) => {
   try {
     const { name, email, password } = req.body
 
@@ -39,7 +41,7 @@ router.post('/register', async (req, res) => {
 })
 
 //login
-router.post('/login', async (req, res) => {
+router.post('/login', validInfo,  async (req, res) => {
   try {
     const { email, password } = req.body
     const user = await pool.query(
@@ -60,6 +62,15 @@ router.post('/login', async (req, res) => {
 
     return res.status(401).send('Invalid credentials')
 
+  } catch (error) {
+    console.error(error)
+    res.status(500).send('Server Error')
+  }
+})
+
+router.get('/is-verified', authorization, async (req, res) => {
+  try {
+    res.json(req.user)
   } catch (error) {
     console.error(error)
     res.status(500).send('Server Error')

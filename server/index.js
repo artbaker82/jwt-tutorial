@@ -10,6 +10,7 @@ app.use(cors())
 
 //registration and login routes
 app.use('/auth', require('./routes/jwtAuth'))
+app.use ('/dashboard', require('./routes/dashboard'))
 
 app.listen(5000, () => {
   console.log('app running on port 5000')
